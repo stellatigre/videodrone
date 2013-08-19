@@ -1,4 +1,4 @@
-var api_key = 'AI39si5lXW19Z9VDP8scyfWe-n6myEmOCsOM_I-huxhGS_JVpB582jwulvgu0TotRCCFEZb1WuZBh9zzWd8l7EQ5c5gqkjxfxQ' ;
+var api_key = 'AI39si5lXW19Z9VDP8scyfWe-n6myEmOCsOM_I-huxhGS_JVpB582jwulvgu0TotRCCFEZb1WuZBh9zzWd8l7EQ5c5gqkjxfxQ';
 var base_url = 'https://gdata.youtube.com/feeds/api/videos?alt=json&paid-content=false&max-results=50&q=';
 var iframe_begin = '<iframe width="640" height="360" src="//www.youtube.com/embed/';
 var iframe_end = '?autoplay=1&vq=small&loop=1&rel=0" frameborder="0" allowfullscreen></iframe>';
@@ -21,6 +21,26 @@ function get_embeddable_id(entries) {
 }
 
 function load_video_json() {
+	var width = $(window).width();
+	var height= $(window).height();
+	console.log("width : "+width);
+	console.log("height: "+height);
+	
+	if (height > 600) {
+		var iframe_height = height / 3 ;
+    } else {
+		iframe_height = height / 2;
+	}
+	if (width >= 1067) {
+		var iframe_width = width / 3 ;
+	} else {
+		iframe_width = width / 2 ;
+	}
+
+	// tired of concating strings, just replace dat shizzz
+	var sized_frame = iframe_begin.replace("640", iframe_width);
+	sized_frame = sized_frame.replace("360", iframe_height);
+
 	var subject  = $('#subject').val();
 	return $.ajax({
 	  url: base_url+subject+'&v=2',
@@ -33,7 +53,7 @@ function load_video_json() {
 			if ($('#chorus').is(':checked')) {
 			    var id = get_embeddable_id(entries);
 			    for (d=1 ; d < 10 ; d++) {
-		                $('#v'+d.toString()).html(iframe_begin+id+iframe_end);
+		                $('#v'+d.toString()).html(sized_frame+id+iframe_end);
 			    }  
 			} else {
 				var used_ids = [];
@@ -43,7 +63,7 @@ function load_video_json() {
 						var id = get_embeddable_id(entries);
 					}
 					console.log(id); used_ids.push(id);
-					$('#v'+d.toString()).html(iframe_begin+id+iframe_end);
+					$('#v'+d.toString()).html(sized_frame+id+iframe_end);
 					}	
 				}
 			}
@@ -52,7 +72,7 @@ function load_video_json() {
 }
 
 function parse_querystring(qs) {
-    var params = query.split("&amp;");
+    var params = qs.split("&amp;");
     console.log(params);
 }
 
@@ -61,9 +81,10 @@ $(document).ready(function() {
     var querystring=window.location.search.substring(1); 
     console.log(querystring);
     if (querystring != "") {
-   		parse_querystring(querystring);
+   		//parse_querystring(querystring);
 		console.log("querystring found");
        	$('search').val(querystring);
+	load_video_json();
     }
 
     $('#submit').click(function() {
