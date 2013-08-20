@@ -29,26 +29,25 @@ function size_iframes () {
 	var height= $(window).height();
 	
 	if (height > 600) {
-		var iframe_height = height / 3 ;
+		var iframe_height = (height / 3) - 20 ;
     } else {
-		iframe_height = height / 2;
+		iframe_height = (height / 2) - 30 ;
 	}
 	if (width >= 1067) {
-		var iframe_width = (width / 3)-5 ;
+		var iframe_width = (width / 3)-12 ;
 	} else {
-		iframe_width = (width / 2)-5 ;
+		iframe_width = (width / 2)-18 ;
 	}
 
-	// tired of concating strings, just replace dat shizzz
-	var frame_text = iframe_begin.replace("640", iframe_width);
-	frame_text = frame_text.replace("360", iframe_height);
+	// no concating strings, just replace dat shizzz after rounding
+	var frame_text = iframe_begin.replace("640", Math.floor(iframe_width));
+	frame_text = frame_text.replace("360", Math.floor(iframe_height));
 
 	return frame_text;
 }
 
 function load_video_json(subject) {
 	var sized_frame = size_iframes();
-	//var subject  = $('#subject').val();
 	return $.ajax({
 	  url: base_url+subject+'&v=2',
 	  dataType: 'json',
@@ -61,9 +60,9 @@ function load_video_json(subject) {
 			if ($('#chorus').is(':checked')) {
 			    var id = get_embeddable_id(entries);
 			    for (d=1 ; d < 10 ; d++) {
-				iframe_end = iframe_end.replace("ID", id);
-				// nasty string concatenation.  life is short.
-		                $('#v'+d.toString()).html(sized_frame+id+iframe_end);
+				var iframe_fin = iframe_end.replace("ID", id);
+				// string concatenation to make iframes.  life is short.
+		                $('#v'+d.toString()).html(sized_frame+id+iframe_fin);
 			    }  
 			} else {
 				var used_ids = [];
@@ -71,11 +70,11 @@ function load_video_json(subject) {
 					var id = get_embeddable_id(entries);
 					// used_ids is for filtering duplicates
 					while (used_ids.indexOf(id) != -1) {
-						var id = get_embeddable_id(entries);
+						id = get_embeddable_id(entries);
 					}
 					console.log(id); used_ids.push(id);		
-					iframe_end = iframe_end.replace("ID", id);
-					$('#v'+d.toString()).html(sized_frame+id+iframe_end);
+					iframe_fin = iframe_end.replace("ID", id);
+					$('#v'+d.toString()).html(sized_frame+id+iframe_fin);
 				}	
 			}
 		}
@@ -83,17 +82,19 @@ function load_video_json(subject) {
 }
 
 function parse_querystring(qs) {
-    var params = qs.split("&amp;");
+    var params = qs.split("&");
     console.log(params);
+	return params;
 }
 
 $(document).ready(function() {
  	
     var querystring=window.location.search.substring(1); 
     if (querystring != "") {
-   	//parse_querystring(querystring);
+   		var parameters = parse_querystring(querystring);
     	console.log("Querystring : "+querystring);
-	video_json = load_video_json(querystring);
+		video_json = load_video_json(parameters[0]);
+	
     }
 
     $('#submit').click(function() {
