@@ -29,14 +29,14 @@ function size_iframes () {
 	var height= $(window).height();
 	
 	if (height > 600) {
-		var iframe_height = (height / 3) - 20 ;
+		var iframe_height = (height / 3) - 12 ;
     } else {
-		iframe_height = (height / 2) - 30 ;
+		iframe_height = (height / 2) - 18 ;
 	}
 	if (width >= 1067) {
-		var iframe_width = (width / 3)-12 ;
+		var iframe_width = (width / 3)-10;
 	} else {
-		iframe_width = (width / 2)-18 ;
+		iframe_width = (width / 2)-13 ;
 	}
 
 	// no concating strings, just replace dat shizzz after rounding
@@ -87,19 +87,37 @@ function parse_querystring(qs) {
 	return params;
 }
 
+function make_querystring(phrase) {
+		var is_chorus =  $("#chorus").is(":checked")
+		if (is_chorus) {var mode='&mode=chorus';}
+		else {mode = ''};
+		var subject_str = encodeURIComponent(phrase);
+		subject_str = subject_str.replace(/%20/g, '+');
+		
+		var share_str = window.location.href+'?'+subject_str+mode;
+		console.log(share_str);
+		return share_str;
+}
+
 $(document).ready(function() {
  	
     var querystring=window.location.search.substring(1); 
     if (querystring != "") {
    		var parameters = parse_querystring(querystring);
-    	console.log("Querystring : "+querystring);
+    		console.log("Querystring : "+querystring);
 		video_json = load_video_json(parameters[0]);
 	
     }
 
     $('#submit').click(function() {
-	var subject = $('#subject').val();
+		//get video data
+		var subject = $('#subject').val();
       	video_json = load_video_json(subject);
+		
+		// This is just for the querystring	
+ 		var share_link = make_querystring(subject);
+		//$('#sharetext').attr('href', share_link);
+		//$('#sharetext').text('Copy this to share this drone.');
       }
     );
 });

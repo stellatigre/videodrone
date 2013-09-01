@@ -1,61 +1,52 @@
+* {
+   margin: 0px;
+   padding: 0px;
+   font-family: Roboto;
+}
+
 html {
   max-heigth: 100%;
 }
 
 body {
   background-color: black;
-  color: rgb(148, 212, 213);
-  max-height: 1080px;
+  color: #7199cb;
+/*  max-height: 1080px; */
 }
 
 .videos {
   display : inline-block;
+  *display : inline;
+  zoom : 1;
 }
 
-/*.videos_right {
-  float : right;
-}
-.center_wrapper {
-  margin-top: -360px;
-}
-.videos {width : 600px;}
-
-div.columns {
-  width:1855px; 
-  height:325px;
+.buttonz {
+  padding: 2px 3px;
+  background: #4479BA;
+  color: #FFF;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
 }
 
-div.colums div{
-  width:600px;
-  height:325px; 
-  float:left;
+.buttonz:hover, .buttonz:focus {
+  background: #356094;
+  /*border: solid 1px #2A4E77;*/
+  text-decoration: none;
 }
 
-#v2 {
-  position: relative;
-  top: -20px;
+/*#top-bar {
+	position: absolute;
 }
 
-#v3 {
-  margin-top: -720px;
-}
-
-#v5 {
-  position: relative;
-  top: -35px;
-}
-
-#v6 {
-  margin-top: -720px;
-}
-
-#v8 {
-  position: relative;
-  top: -1010px;
-}
-#v9 {
-  position: relative;
-  top: -360px;
+#vid-container {
+  position: absolute;
 }
 */
-		
+/*#sharetext {
+/  float: right;
+}*/
+
+input[type="text"], textarea {
+  background-color : #7199cb; 
+}
