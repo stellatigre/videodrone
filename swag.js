@@ -72,7 +72,8 @@ function load_video_json(subject) {
 					while (used_ids.indexOf(id) != -1) {
 						id = get_embeddable_id(entries);
 					}
-					console.log(id); used_ids.push(id);		
+					used_ids.push(id);
+						
 					iframe_fin = iframe_end.replace("ID", id);
 					$('#v'+d.toString()).html(sized_frame+id+iframe_fin);
 				}	
@@ -99,14 +100,16 @@ function make_querystring(phrase) {
 		return share_str;
 }
 
+//done with helper functions ,
 $(document).ready(function() {
  	
     var querystring=window.location.search.substring(1); 
     if (querystring != "") {
    		var parameters = parse_querystring(querystring);
-    		console.log("Querystring : "+querystring);
+			$('#sharetext').attr('href', share_link);
+			$('#sharetext').text(share_link);
+			console.log("Querystring : "+querystring);
 		video_json = load_video_json(parameters[0]);
-	
     }
 
     $('#submit').click(function() {
@@ -116,8 +119,8 @@ $(document).ready(function() {
 		
 		// This is just for the querystring	
  		var share_link = make_querystring(subject);
-		//$('#sharetext').attr('href', share_link);
-		//$('#sharetext').text('Copy this to share this drone.');
+		$('#sharetext').attr('href', share_link);
+		$('#sharetext').text(share_link);
       }
     );
 });
