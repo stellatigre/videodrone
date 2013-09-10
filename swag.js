@@ -106,6 +106,7 @@ $(document).ready(function() {
     var querystring=window.location.search.substring(1); 
     if (querystring != "") {
    		var parameters = parse_querystring(querystring);
+ 		var share_link = make_querystring(parameters[0]);
 			$('#sharetext').attr('href', share_link);
 			$('#sharetext').text(share_link);
 			console.log("Querystring : "+querystring);
@@ -116,9 +117,8 @@ $(document).ready(function() {
 		//get video data
 		var subject = $('#subject').val();
       	video_json = load_video_json(subject);
-		
+		share_link = make_querystring(subject);
 		// This is just for the querystring	
- 		var share_link = make_querystring(subject);
 		$('#sharetext').attr('href', share_link);
 		$('#sharetext').text(share_link);
       }
