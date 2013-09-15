@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var db   = require('./routes/db');
 var http = require('http');
 var path = require('path');
+var async = require('async');
 
 var pg = require('pg');
 
@@ -28,11 +29,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
-}
+}	
+
+
+app.get('/hw', function(req, res){
+  res.send('hello world');
+});
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/db/:table/', db.show)
 app.post('/db', db.add);
+app.get('/db', db.show);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
