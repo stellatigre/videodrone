@@ -1,5 +1,5 @@
 var pg = require('pg');				// PostgreSQL up in here
-var db_string = "postgres://postgres:Qu33rs4$atan@localhost/videodrone";
+var db_string = "postgres://stella:Qu33rs4$atan@localhost/videodrone";
 
 var client = new pg.Client(db_string); 
 client.connect();				// get the DB connection ready
@@ -14,16 +14,29 @@ function returnHandler(result, response){
 	else {response.json(result.rows);}
 }
 
+//addAllRows () 
+
+function dupeCheck(term) {
+	var query = client.query('SELECT DISTINCT querystring FROM query_data WHERE querystring='+term+';');
+	query.on('row', function(row, result) {
+		result.addRow(row);	
+	});
+	console.log(result.rows);
+	return result.rows;
+}
+
 exports.add = function insert_term(req, res) {
 
 	if (req.body.query != null) {
-			var query = client.query(		// insert to DB
-			'INSERT INTO query_data(querystring, count) values($1, $2)', [req.body.query, 1]
-		);
-
-		query.on('end', function() {
-			res.json({'success' : 'true'});			// acknowledge success
-		});
+			//if(!dupeCheck(req.body.query)) {
+				var query = client.query(		// insert to DB
+				'INSERT INTO query_data(querystring, count) values($1, $2)', [req.body.query, 1]
+				);
+				console.log(req.body.query);
+				query.on('end', function() {
+					res.json({'success' : 'true'});			// acknowledge success
+				});
+			//}
 	}
 	else {		// error for lack of query parameter
 		res.send("please POST a 'query' value up in here.\n");
@@ -47,5 +60,6 @@ exports.show = function show(req, res) {
 		returnHandler(result, res);			//send back our data in json format
 	});
 }
+
 
 
