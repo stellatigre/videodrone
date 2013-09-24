@@ -1,0 +1,52 @@
+* {
+   margin: 0px;
+   padding: 0px;
+   font-family: Roboto;
+}
+
+html {
+  max-heigth: 100%;
+}
+
+body {
+  background-color: black;
+  color: #7199cb;
+/*  max-height: 1080px; */
+}
+
+.videos {
+  display : inline-block;
+  *display : inline;
+  zoom : 1;
+}
+
+.buttonz {
+  padding: 2px 3px;
+  background: #4479BA;
+  color: #FFF;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+
+.buttonz:hover, .buttonz:focus {
+  background: #356094;
+  /*border: solid 1px #2A4E77;*/
+  text-decoration: none;
+}
+
+/*#top-bar {
+	position: absolute;
+}
+
+#vid-container {
+  position: absolute;
+}
+*/
+/*#sharetext {
+/  float: right;
+}*/
+
+input[type="text"], textarea {
+  background-color : #7199cb; 
+}
