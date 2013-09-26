@@ -36,6 +36,7 @@ exports.add = function insert_term(req, res) {
 				query.on('end', function() {
 					res.json({'success' : 'true'});			// acknowledge success
 				});
+	
 			//}
 	}
 	else {		// error for lack of query parameter
