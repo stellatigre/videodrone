@@ -30,9 +30,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }	
 
-app.get('/hw', function(req, res){
-  res.send('hello world');
-});
+app.locals.basedir = '/home/stella/www/videodrone/';
+
 
 app.get('/', routes.index);
 app.get('/db/:table/', db.show)

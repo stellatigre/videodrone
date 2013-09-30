@@ -9,7 +9,7 @@ function isEmptyObject(obj) {
 }
 
 function returnHandler(result, response){
-	if(result.rows.length === 0) {response.send('term not found in database');}
+	if(result.rows.length === 0) {response.send('term not found');}
 	else if(result.rows.length === 1) {response.json(result.rows[0]);} //single result
 	else {response.json(result.rows);}
 }
@@ -17,7 +17,7 @@ function returnHandler(result, response){
 //addAllRows () 
 
 function dupeCheck(term) {
-	var query = client.query('SELECT DISTINCT querystring FROM query_data WHERE querystring='+term+';');
+	var query = client.query('SELECT DISTINCT querystring FROM query_data WHERE querystring IN values($1)', term);
 	query.on('row', function(row, result) {
 		result.addRow(row);	
 	});
@@ -40,7 +40,7 @@ exports.add = function insert_term(req, res) {
 			//}
 	}
 	else {		// error for lack of query parameter
-		res.send("please POST a 'query' value up in here.\n");
+		res.json({error : 'no query value'});
 	}
 }
 

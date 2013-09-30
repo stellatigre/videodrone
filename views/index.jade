@@ -1,5 +1,27 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+html
+    head
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+        script(src='./getvideos.js')
+        link(href='http://fonts.googleapis.com/css?family=Roboto:500', rel='stylesheet', type='text/css')
+        link(href='/videodrone.css', rel='stylesheet', type='text/css')
+    body
+        // <a id="sharetext"></a>
+        #top-bar
+            input#subject(type='text')
+            | Inspiration?
+            input#submit.buttonz(type='submit', value='Make It So')
+            input#chorus(type='radio', name='mode', value='1')
+            | Chorus
+            input#harmony(type='radio', name='mode', value='2', checked='')
+            | Harmony
+            a#sharetext(href='')
+        #vid-container
+            #v1.videos
+            #v2.videos
+            #v3.videos
+            #v4.videos
+            #v5.videos
+            #v6.videos
+            #v7.videos
+            #v8.videos
+            #v9.videos
