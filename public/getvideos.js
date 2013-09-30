@@ -1,3 +1,4 @@
+// Client side of Videodrone
 // pieces of Strings, for making requests and filling in iframes.
 var api_key = 'AI39si5lXW19Z9VDP8scyfWe-n6myEmOCsOM_I-huxhGS_JVpB582jwulvgu0TotRCCFEZb1WuZBh9zzWd8l7EQ5c5gqkjxfxQ';
 var base_url = 'https://gdata.youtube.com/feeds/api/videos?alt=json&paid-content=false&max-results=50&q=';
@@ -17,28 +18,23 @@ function get_id(entry) {
 
 // ensures the video ID we've selected is embeddable
 function get_embeddable_id(entries) {
-	var r_entry = entries[random_int(0,24)];
+	var r_entry = entries[random_int(0,49)];
 	while (r_entry['yt$accessControl'][4]['permission'] == "denied") {
-	   r_entry = entries[random_int(0,24)];
+	   r_entry = entries[random_int(0,49)];
 	}
 	return get_id(r_entry);
 }
 
-// how big to make the iframes ?
+// how big to make the iframes ? These dimensions preserve 16:9
 function size_iframes () {
 	var width = $(window).width();
 	var height= $(window).height();
 	
-	if (height > 600) {
-		var iframe_height = (height / 3) - 12 ;
-    } else {
-		iframe_height = (height / 2) - 18 ;
-	}
-	if (width >= 1067) {
-		var iframe_width = (width / 3)-10;
-	} else {
-		iframe_width = (width / 2)-13 ;
-	}
+	if (height > 600) {	var iframe_height = (height / 3) - 12 ;} 
+	else { iframe_height = (height / 2) - 18 ; }	// subtract to make it fit better
+	
+	if (width >= 1067) {var iframe_width = (width / 3)-10; } 
+	else { iframe_width = (width / 2)-13 ; }
 
 	// no concating strings, just replace after rounding
 	var frame_text = iframe_begin.replace("640", Math.floor(iframe_width));
@@ -47,10 +43,10 @@ function size_iframes () {
 	return frame_text;
 }
 
-// div is an int 1-9
+// div is an int 1-9 - this inserts the iframe HTML
 function insert_frame(id, div, sized_frame) {
-	var iframe_fin = iframe_end.replace("id", id);		//a playlist...of itself (to loop)
-	$('#v'+div.toString()).html(sized_frame+id+iframe_fin);//actually fill our div in
+	var iframe_fin = iframe_end.replace("id", id);			//a playlist of itself (to loop)
+	$('#v'+div.toString()).html(sized_frame+id+iframe_fin);	//actually fill our div in
 }
 
 function fill_divs(sized_frame){
@@ -59,24 +55,22 @@ function fill_divs(sized_frame){
 	var used_ids = []; 
 					 
 	for (div=1 ; div < 10 ; div++) {
-		// "Harmony" - all different videos - default
-		if (-($('#chorus').is(':checked'))) {
+		if (-($('#chorus').is(':checked'))) {		// "Harmony" mode - default
 			var id = get_embeddable_id(entries);
-			while (used_ids.indexof(id) != -1) {
+			while (used_ids.indexof(id) != -1) {	//pick feed entries till embeddable
 				id = get_embeddable_id(entries);
 			}
-			used_ids.push(id);
-			insert_frame(id, div, sized_frame);
-		}  // "chorus" - all the same video - only if selected
-		else {
+			used_ids.push(id);						// used for dupe filtering
+			insert_frame(id, div, sized_frame);		
+		} 			 
+		else {									// "Chorus" - have to pick this one,
 			id = get_embeddable_id(entries);
 			insert_frame(id, div, sized_frame);
 		}
 	}	
 }
 
-//sends request to the Youtube APi for our videos to pick from
-function load_video_json(subject) {
+function load_video_json(subject) {		// this sends the Youtube API request.
 	var frame_text = size_iframes();
 	return $.ajax({
 	  url: base_url+subject+'&v=2',
@@ -85,56 +79,44 @@ function load_video_json(subject) {
 		    'accept:': 'application/json'	
 		   },
 	  success: function() {
-			  console.log(video_json);
-			  fill_divs(frame_text);	
-	  		}
+			  fill_divs(frame_text);	// once we get our response data back	
+	  		}							// make the iframes
 	});
 }
 
-// these 2 are for making querystrings
-function parse_querystring(qs) {
+function parse_querystring(qs) { 		
     var params = qs.split("&");
-    console.log(params);
 	return params;
 }
 
 function make_querystring(phrase) {
-		var is_chorus =  $("#chorus").is(":checked")
-		if (is_chorus) {var mode='&mode=chorus';}
+		if ($('#chorus').is(':checked')) {var mode='&mode=chorus';}
 		else {mode = ''};
+
 		var subject_str = encodeURIComponent(phrase);
-		subject_str = subject_str.replace(/%20/g, '+');
+		subject_str = subject_str.replace(/%20/g, '+');	//regular enocding is ugly
 		
 		var share_str = window.location.href+'?'+subject_str+mode;
 		return share_str;
 }
 
-//done with helper functions ,
-// what's happening after page is loaded?
+//done with helper functions - what's happening after page is loaded?
 $(document).ready(function() {
  	
     var querystring=window.location.search.substring(1); 
     if (querystring != "") {
    		var parameters = parse_querystring(querystring);
- 		var share_link = make_querystring(parameters[0]);
-			$('#sharetext').attr('href', share_link);
-			$('#sharetext').text(share_link);
-			console.log("Querystring : "+querystring);
-			
-		video_json = load_video_json(parameters[0]);
+		video_json = load_video_json(parameters[0]);    // load videos based on query
     }
 
-    $('#submit').click(function() {
-		//get video data
-		var subject = $('#subject').val();
-      	video_json = load_video_json(subject);
-		share_link = make_querystring(subject);
-		// This is just for the querystring	
-		$('#sharetext').attr('href', share_link);
-		$('#sharetext').text(share_link);
+    $('#submit').click(function() {		// our onClick event, pulls everything in
+		
+		var subject = $('#subject').val();		// grab textbox value
+      	video_json = load_video_json(subject);		// make API request
+		var share_link = make_querystring(subject);		// make share link
+		$('#sharetext').attr('href', share_link);	// display our share link
+		$('#sharetext').text(share_link);	
 
-		//POST to backend db
-		$.post('http://stellatigre.com/db', { 'query' : subject });
-      }
-    );
+		$.post('http://stellatigre.com/db', { 'query' : subject }); // POST to DB 
+	});
 });
