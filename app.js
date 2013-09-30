@@ -9,7 +9,6 @@ var db   = require('./routes/db');
 var http = require('http');
 var path = require('path');
 var async = require('async');
-
 var pg = require('pg');
 
 var app = express();

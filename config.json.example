@@ -1,0 +1,5 @@
+{
+	"psql_host" : "localhost",
+	"psql_pass" : "superawesomepassword",
+	"psql_user" : "tigre"
+}

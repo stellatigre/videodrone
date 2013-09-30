@@ -1,5 +1,8 @@
 var pg = require('pg');				// PostgreSQL up in here
-var db_string = "postgres://stella:Qu33rs4$atan@localhost/videodrone";
+var conf = require('../config.json');  // configuration file
+
+// add in our postgres user / pass / host from config file - DB is "videodrone"
+var db_string = "postgres://"+conf.psql_user+":"+conf.psql_pass+"@"+conf.psql_host+"/videodrone";
 
 var client = new pg.Client(db_string); 
 client.connect();				// get the DB connection ready

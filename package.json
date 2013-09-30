@@ -9,6 +9,7 @@
     "express": "3.4.0",
     "jade": "*",
     "pg"  : "2.6.*",
-	"request": "*"
+	"request": "*",
+	"zombie" : "*"
   }
 }
