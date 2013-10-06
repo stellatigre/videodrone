@@ -1,0 +1,12 @@
+      script(type='text/javascript')
+        mocha.ui('bdd');
+        mocha.reporter('html');
+        expect = chai.expect;
+        assert = chai.assert;
+      // include our specifications
+      script(type='text/javascript', src='breeze-dependencies.js')
+      script(type='text/javascript', src='TestNetflixClient.js')
+      // run the tests
+      script(type='text/javascript')
+        if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+        else { mocha.run(); }

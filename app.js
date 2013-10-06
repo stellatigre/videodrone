@@ -5,11 +5,8 @@
 
 var express = require('express');
 var routes = require('./routes');
-var db   = require('./routes/db');
 var http = require('http');
 var path = require('path');
-var async = require('async');
-var pg = require('pg');
 
 var app = express();
 
@@ -31,10 +28,10 @@ if ('development' == app.get('env')) {
 
 app.locals.basedir = '/home/stella/www/videodrone/';
 
-
 app.get('/', routes.index);
-app.post('/db', db.add);
-app.get('/db', db.show);
+
+app.post('/db', routes.db.add);			// database routes
+app.get('/db', routes.db.show);
 
 app.get('/test', routes.testPage);  // testing page
 
