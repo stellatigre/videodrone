@@ -2,7 +2,7 @@ var pg = require('pg');				// PostgreSQL up in here
 var conf = require('../config.json');  // configuration file
 
 // add in our postgres user / pass / host from config file - DB is "videodrone"
-var dbString = "postgres://"+conf.psql_user+":"+conf.psql_pass+"@"+conf.psql_host+"/videodrone";
+var dbString = "postgres://"+conf.psqlUser+":"+conf.psqlPass+"@"+conf.psqlHost+"/videodrone";
 
 var client = new pg.Client(dbString); 
 client.connect();				// get the DB connection ready
@@ -24,14 +24,13 @@ function dupeCheck(term) {
 		result.addRow(row);	
 	});
 	query.on('end', function(result) { 
-		console.log(result.rows);
 		return result.rows;
 	});
 }
 
 exports.add = function insert_term(req, res) {
 
-	if (req.body.query != null) {
+	if (req.body.query != null || "") {
 			var query = client.query(		// insert to DB
 				'INSERT INTO query_data(querystring, count) values($1, $2)', [req.body.query, 1]
 			);
@@ -46,9 +45,9 @@ exports.add = function insert_term(req, res) {
 }
 
 exports.show = function show(req, res) {
-	var term = '';
+	
 	if (!isEmptyObject(req.query) && req.query.term != undefined) {
-		term = req.query.term;
+		var term = req.query.term;
 	}
 	else {term ='NOT NULL';}
 

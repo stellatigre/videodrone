@@ -24,9 +24,11 @@ describe('GET /db - ', function() {
 		req(baseUrl+'/db', function(error, response, body) {
 			var json = JSON.parse(body);
 			assert.ok(json);					//valid JSON ?
-			async.forEach(json, function(item) { 
+			async.forEach(json, function(item) {
+				if (item.querystring != "") {	
 				assert.ok(item.querystring);					// got a querystring?
-				assert.ok(item.count);							// plus a count.a
+				assert.ok(item.count);
+				}											
 			});
 			done();
 		});

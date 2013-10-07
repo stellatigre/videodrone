@@ -27,20 +27,20 @@ function get_embeddable_id(entries) {
 
 // how big to make the iframes ? These dimensions preserve 16:9
 function size_iframes () {
-	var width = $(window).width();
-	var height= $(window).height();
+	var width = window.innerWidth;
+	var height= window.innerHeight;
 	
-	if (height > 600) {	var iframe_height = (height / 3) - 12 ;} 
+	if (height > 600) {	var iframeHeight = (height / 3) - 12 ;} 
 	else { iframe_height = (height / 2) - 18 ; }	// subtract to make it fit better
 	
-	if (width >= 1067) {var iframe_width = (width / 3)-10; } 
-	else { iframe_width = (width / 2)-13 ; }
+	if (width >= 1067) {var iframeWidth = (width / 3)-10; } 
+	else { iframeWidth = (width / 2)-13 ; }
 
 	// no concating strings, just replace after rounding
-	var frame_text = iframe_begin.replace("640", Math.floor(iframe_width));
-	frame_text = frame_text.replace("360", Math.floor(iframe_height));
-
-	return frame_text;
+	var frameText = iframe_begin.replace("640", Math.floor(iframeWidth));
+	frameText = frameText.replace("360", Math.floor(iframeHeight));
+	
+	return frameText;
 }
 
 // div is an int 1-9 - this inserts the iframe HTML
@@ -55,9 +55,9 @@ function fill_divs(sized_frame){
 	var used_ids = []; 
 					 
 	for (div=1 ; div < 10 ; div++) {
-		if (-($('#chorus').is(':checked'))) {		// "Harmony" mode - default
+		if ($('#harmony').is(':checked')) {		// "Harmony" mode - default
 			var id = get_embeddable_id(entries);
-			while (used_ids.indexof(id) != -1) {	//pick feed entries till embeddable
+			while (used_ids.indexOf(id) != -1) {	//pick feed entries till embeddable
 				id = get_embeddable_id(entries);
 			}
 			used_ids.push(id);						// used for dupe filtering
@@ -71,16 +71,15 @@ function fill_divs(sized_frame){
 }
 
 function load_video_json(subject) {		// this sends the Youtube API request.
-	var frame_text = size_iframes();
-	return $.ajax({
+	return $.ajax({						
 	  url: base_url+subject+'&v=2',
 	  dataType: 'json',
 	  headers: {'X-GData-Key': 'key='+api_key,
 		    'accept:': 'application/json'	
-		   },
+		   	},
 	  success: function() {
-			  fill_divs(frame_text);	// once we get our response data back	
-	  		}							// make the iframes
+			  fill_divs(size_iframes());	// once we get our response data back	
+	 		}							// make the iframes
 	});
 }
 
@@ -117,6 +116,6 @@ $(document).ready(function() {
 		$('#sharetext').attr('href', share_link);	// display our share link
 		$('#sharetext').text(share_link);	
 
-		$.post('http://stellatigre.com/db', { 'query' : subject }); // POST to DB 
+		$.post('http://stellatigre.com:4200/db', { 'query' : subject }); // POST to DB 
 	});
 });
