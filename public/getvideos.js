@@ -28,8 +28,9 @@ function get_embeddable_id(entries) {
 // how big to make the iframes ? These dimensions preserve 16:9
 function size_iframes () {
 	var width = window.innerWidth;
-	var height= window.innerHeight;
-	
+	var height= window.innerHeight;		// need at least 200px by 200px players
+	if (height < 400 ||  width < 400) {alert("Window is too small for multiple Youtube videos to fit.");}
+
 	if (height > 600) {	var iframeHeight = (height / 3) - 12 ;} 
 	else { iframe_height = (height / 2) - 18 ; }	// subtract to make it fit better
 	

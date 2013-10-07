@@ -1,14 +1,11 @@
-
-/**
- * Module dependencies.
- */
-
+// Module dependencies.
 var express = require('express');
-var routes = require('./routes');
+var routes = require('./routes');			// pages we can serve
+var db = require('./routes/db.js');			// Database-related routes, serve JSON
 var http = require('http');
 var path = require('path');
-var config =require('./config.json');
-var db = require('./routes/db.js');
+var config =require('./config.json');		// our config file
+
 var app = express();
 
 // all environments
@@ -29,12 +26,12 @@ if ('development' == app.get('env')) {
 
 app.locals.basedir = '/home/stella/www/videodrone/';
 
-app.get('/', routes.index);
+app.get('/', routes.index);			// Videodrone frontend
+app.get('/test', routes.testPage);  // testing harness on top of index
 
-app.post('/db', db.add);			// database routes
-app.get('/db', db.show);
+app.post('/db', db.add);			// database adding
+app.get('/db', db.show);			// database quering
 
-app.get('/test', routes.testPage);  // testing page
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -7,7 +7,6 @@ var dbString = "postgres://"+conf.psqlUser+":"+conf.psqlPass+"@"+conf.psqlHost+"
 var client = new pg.Client(dbString); 
 client.connect();				// get the DB connection ready
 
-
 function isEmptyObject(obj) {
   return !Object.keys(obj).length;		//helper function 
 }
@@ -48,10 +47,9 @@ exports.show = function show(req, res) {
 	
 	if (!isEmptyObject(req.query) && req.query.term != undefined) {
 		var term = req.query.term;
-	}
-	else {term ='NOT NULL';}
-
-	var query = client.query("SELECT DISTINCT * FROM query_data WHERE querystring IS values($1)", term); 
+		var query = client.query("SELECT DISTINCT * FROM query_data WHERE querystring=values($1)", term);
+	}	
+	else {query = client.query("SELECT DISTINCT * FROM query_data WHERE querystring IS NOT NULL");}
 
 	query.on('row', function(row, result) {
 		result.addRow(row);				// add row data to results object
