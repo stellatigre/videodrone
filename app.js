@@ -7,11 +7,12 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var config =require('./config.json');
 
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 4200);
+app.set('port', process.env.PORT || config.port);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
