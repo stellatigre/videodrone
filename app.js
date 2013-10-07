@@ -8,7 +8,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var config =require('./config.json');
-
+var db = require('./routes/db.js');
 var app = express();
 
 // all environments
@@ -31,8 +31,8 @@ app.locals.basedir = '/home/stella/www/videodrone/';
 
 app.get('/', routes.index);
 
-app.post('/db', routes.db.add);			// database routes
-app.get('/db', routes.db.show);
+app.post('/db', db.add);			// database routes
+app.get('/db', db.show);
 
 app.get('/test', routes.testPage);  // testing page
 

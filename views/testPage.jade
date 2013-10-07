@@ -4,12 +4,12 @@ html
   body
     #mocha
     script(src='//cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min.js')
-    script(src='/libs/chai.js')
+    script(src='//chaijs.com/chai.js')
     script
       var mocha;
       mocha.ui('bdd');
       var expect = chai.expect;
-    script(src='tests/browser_tests.js')
+    script(src='browser_tests.js')
     script
       if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
       else { mocha.run(); }
