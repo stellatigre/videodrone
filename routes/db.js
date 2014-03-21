@@ -1,5 +1,5 @@
-var pg = require('pg');				// PostgreSQL up in here
-var conf = require('../config.json');  // configuration file
+var pg = require('pg');				// PostgreSQL driver
+var conf = require('../config.json');  		// configuration file
 
 // add in our postgres user / pass / host from config file - DB is "videodrone"
 var dbString = "postgres://"+conf.psqlUser+":"+conf.psqlPass+"@"+conf.psqlHost+"/videodrone";
@@ -30,13 +30,13 @@ function dupeCheck(term) {
 exports.add = function insert_term(req, res) {
 
 	if (req.body.query != null || "") {
-			var query = client.query(		// insert to DB
-				'INSERT INTO query_data(querystring, count) values($1, $2)', [req.body.query, 1]
-			);
+		var query = client.query(		// insert to DB
+			'INSERT INTO query_data(querystring, count) values($1, $2)', [req.body.query, 1]
+		);
 			
-			query.on('end', function() {
-				res.json({'success' : 'true'});			// acknowledge success
-			});
+		query.on('end', function() {
+			res.json({'success' : 'true'});			// acknowledge success
+		});
 	}
 	else {		// error for lack of query parameter
 		res.json({error : 'no query value'});
